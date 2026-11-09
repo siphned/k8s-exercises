@@ -49,6 +49,17 @@ Each exercise directory contains its manifests, a `README.md` with the
 demonstration steps, and a short `NOTES.md` file with observations and review
 questions.
 
+## Changelog
+
+| Exercise | PR link | Date merged |
+|---|---|---|
+| Exercise 0 — repository setup | — | — |
+| Exercise 1 — Pods and kubectl basics | — | — |
+| Exercise 2 — Deployments and rolling updates | — | — |
+| Exercise 3 — Configuration and Secrets | — | — |
+| Exercise 4 — Stateful workloads | — | — |
+| Exercise 5 — Day-2 operations and Helm | — | — |
+
 ## Running an exercise
 
 Work in the namespace assigned to the exercise. Create it before applying
