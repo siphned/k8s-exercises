@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  kubeconform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up kubeconform
+        uses: bmuschko/setup-kubeconform@v1
+
+      - name: Validate YAML manifests
+        run: |
+          set -euo pipefail
+
+          mapfile -d '' manifests < <(
+            find . -type f -name '*.yaml' \
+              ! -path './.github/workflows/*' \
+              -print0
+          )
+
+          if ((${#manifests[@]} == 0)); then
+            echo "No YAML manifests found."
+            exit 0
+          fi
+
+          kubeconform -strict -summary "${manifests[@]}"
