@@ -12,7 +12,19 @@ spec:
       ports:
         - name: http
           containerPort: 80
+      volumeMounts:
+        - name: shared-data
+          mountPath: /shared
+
     - name: curl
       image: curlimages/curl
       command: ["sh", "-c", "while true; do curl -s localhost; sleep 5; done"]
+      volumeMounts:
+        - name: shared-data
+          mountPath: /shared
+
+  volumes:
+    - name: shared-data
+      emptyDir: {}
+
   restartPolicy: Always
