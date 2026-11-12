@@ -17,3 +17,12 @@
   - `restartCount` increasing means that kubelet restarted a container inside the same Pod. Pod recreation produces a new Pod object and resets its container status, even if the replacement Pod uses the same name.
 
 - `restartPolicy: Always` restarts the intentionally failing container in `crash-pod.yaml`. Repeated non-zero exits eventually produce `CrashLoopBackOff`, which is a delay between restart attempts rather than a separate kind of crash.
+
+- what does each component in `kube-system` do?
+  - `coredns` provides DNS-based service discovery. Pods can use names such as `kubernetes.default.svc.cluster.local` instead of remembering ClusterIPs.
+  - `kube-proxy` runs on every node and installs network rules that direct Service traffic to matching Pod endpoints.
+  - `kindnet` is this kind cluster's CNI implementation. It configures Pod networking so Pods receive IP addresses and can communicate across the cluster.
+  - `kube-apiserver` exposes the Kubernetes API used by `kubectl` and by the other control-plane components.
+  - `etcd` stores the cluster's desired and observed state.
+  - `kube-scheduler` chooses a suitable node for each unscheduled Pod.
+  - `kube-controller-manager` runs reconciliation controllers that continually move actual cluster state toward the declared desired state.
