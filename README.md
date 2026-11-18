@@ -53,8 +53,8 @@ questions.
 
 | Exercise | PR link | Date merged |
 |---|---|---|
-| Exercise 0 — repository setup | — | — |
-| Exercise 1 — Pods and kubectl basics | — | — |
+| Exercise 0 — repository setup | [#1](https://github.com/siphned/k8s-exercises/pull/1) | 09/11/2026 |
+| Exercise 1 — Pods and kubectl basics | [#2](https://github.com/siphned/k8s) | — |
 | Exercise 2 — Deployments and rolling updates | — | — |
 | Exercise 3 — Configuration and Secrets | — | — |
 | Exercise 4 — Stateful workloads | — | — |
