@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: web-deploy
   namespace: ex2
+  annotations:
+    kubernetes.io/change-cause: "Update nginx image version to 1.27"
 
 spec:
   replicas: 3
@@ -26,7 +28,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:1.26
+          image: nginx:1.27
           ports:
             - name: http
               containerPort: 80
