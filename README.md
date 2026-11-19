@@ -19,7 +19,7 @@ clusters. The exercises were prepared with `kind v0.34.0-alpha` and
 Create the single-node cluster used by Exercises 1–4:
 
 ```bash
-kind create cluster --name k8s-exercises
+kind create cluster --name k8s-exercises --config kind-config.yaml
 kubectl cluster-info
 kubectl get nodes
 ```
@@ -55,7 +55,7 @@ questions.
 |---|---|---|
 | Exercise 0 — repository setup | — | — |
 | Exercise 1 — Pods and kubectl basics | — | — |
-| Exercise 2 — Deployments and rolling updates | — | — |
+| Exercise 2 — Deployments and rolling updates | [PR #3](https://github.com/siphned/k8s-exercises/pull/3) | — |
 | Exercise 3 — Configuration and Secrets | — | — |
 | Exercise 4 — Stateful workloads | — | — |
 | Exercise 5 — Day-2 operations and Helm | — | — |

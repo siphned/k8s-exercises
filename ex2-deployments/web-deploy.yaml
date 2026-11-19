@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: web
+  namespace: ex2
+  annotations:
+    kubernetes.io/change-cause: "Deploy nginx:1.27 with three replicas"
+
+spec:
+  replicas: 3
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  selector:
+    matchLabels:
+      app: web
+
+  template:
+    metadata:
+      labels:
+        app: web
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - name: http
+              containerPort: 80
+
+      restartPolicy: Always
