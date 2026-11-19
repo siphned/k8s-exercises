@@ -2,10 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: web-deploy
+  name: web
   namespace: ex2
   annotations:
-    kubernetes.io/change-cause: "Restore nginx:1.27 with RollingUpdate after Recreate test"
+    kubernetes.io/change-cause: "Deploy nginx:1.27 with three replicas"
 
 spec:
   replicas: 3

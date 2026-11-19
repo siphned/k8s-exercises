@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: web-deploy
+  name: web
   namespace: ex2
   annotations:
     kubernetes.io/change-cause: "Attempt rollout with unavailable nginx:1.99 image"

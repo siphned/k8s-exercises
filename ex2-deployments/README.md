@@ -15,11 +15,11 @@ Run the complete good rollout, broken rollout, availability check, and rollback:
 ./ex2-deployments/rollout-demo.sh
 ```
 
-The script demonstrates that the unavailable `nginx:1.99` Pod enters
-`ImagePullBackOff` while all three old Pods remain Ready and continue serving through
-the NodePort. It then runs `kubectl rollout undo`, verifies that the image is back to
-`nginx:1.27`, and reapplies the committed healthy manifest to reconcile declarative
-state.
+The script resets the demo Deployment's revision history, then demonstrates that the
+unavailable `nginx:1.99` Pod enters `ImagePullBackOff` while all three old Pods remain
+Ready and continue serving through the NodePort. It then runs `kubectl rollout undo`,
+verifies that the image is back to `nginx:1.27`, and reapplies the committed healthy
+manifest to reconcile declarative state.
 
 Verify the final Service and its three endpoints from inside and outside the cluster:
 
@@ -33,10 +33,10 @@ curl http://127.0.0.1:32142/
 Actual rollout history after the demo:
 
 ```text
-deployment.apps/web-deploy
+deployment.apps/web
 REVISION  CHANGE-CAUSE
 2         Attempt rollout with unavailable nginx:1.99 image
-3         Restore nginx:1.27 with RollingUpdate after Recreate test
+3         Deploy nginx:1.27 with three replicas
 ```
 
 Explain from the observed rollout that `maxSurge: 1` permits one extra Pod while

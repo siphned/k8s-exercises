@@ -1,11 +1,11 @@
 # Q&A
-- 2.1 
+- 2.1
   - "Draw the ownership chain Deployment → ReplicaSet → Pod"
-    - Deployment: web-deploy
-      └── ReplicaSet: web-deploy-865b5674c
-          ├── Pod: web-deploy-865b5674c-k8vgk
-          ├── Pod: web-deploy-865b5674c-n4j8w
-          └── Pod: web-deploy-865b5674c-nckf5
+    - Deployment: web
+      └── ReplicaSet: web-865b5674c
+          ├── Pod: web-865b5674c-<pod-id>
+          ├── Pod: web-865b5674c-<pod-id>
+          └── Pod: web-865b5674c-<pod-id>
   - step 4
     - deleted Pods, and ReplicaSets are automatically recreated and launched seamlessly, in contrast to Deployments which are not recreated
 
@@ -36,7 +36,7 @@
 
 - 2.4
   - step 1: `RollingUpdate` strategy
-    - while watching the Pods in a separate terminal after applying the manifest changes, I could see that at any time there were at least 3 Pods running, and at some points 4, which matches the expectations given by the `RollingUpdate` strategy options we have chosen: `maxSurge: 1` dictates that there can be at most 1 extra Pod active above the desired state while `maxUnavailable: 0` states that there cannot be any less than the desired state of 3. 
+    - while watching the Pods in a separate terminal after applying the manifest changes, I could see that at any time there were at least 3 Pods running, and at some points 4, which matches the expectations given by the `RollingUpdate` strategy options we have chosen: `maxSurge: 1` dictates that there can be at most 1 extra Pod active above the desired state while `maxUnavailable: 0` states that there cannot be any less than the desired state of 3.
   - step 3: `change-cause` annotation
     - useful for planned changes in manifest which require applying it again, when inspecting the rollout history, the change cause is listed, and can be tracked
   - step 4: change nginx version to a non-existent one
@@ -48,4 +48,4 @@
     - after the test, the manifest was restored to `RollingUpdate` with the valid `nginx:1.27` image so that the exercise ends with three healthy replicas.
 
 - 2.5
-  - a Service does not care whether its Pods were created by a Deployment, StatefulSet, or by hand because it does not inspect their ownership chain. It selects whichever Ready Pods currently match its label selector and sends traffic to those endpoints. The workload controller is responsible for creating and maintaining Pods, while the Service is independently responsible for discovering matching backends.
+  - a Service does not care whether its Pods were created by a Deployment, StatefulSet, or by hand because it does not inspect their ownership chain. Its selector discovers matching Pods and records them in EndpointSlices, while readiness determines which endpoints normally receive traffic. The workload controller maintains the Pods independently from the Service discovering its backends.
