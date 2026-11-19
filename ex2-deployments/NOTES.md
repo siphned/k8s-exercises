@@ -42,3 +42,7 @@
   - step 4: change nginx version to a non-existent one
     - the new Pods could not start and never became Ready, so the rolling update kept the three old healthy Pods running to satisfy `maxUnavailable: 0`. The rollout stalled because Kubernetes could not safely replace them.
     - Kubernetes did not give up after the first attempts: it continued retrying the image pull with increasing delays, shown as `ErrImagePull` and `ImagePullBackOff`. A Deployment does not automatically roll back; after its progress deadline it reports a failed rollout while the old Pods continue serving traffic.
+  - step 6: change the Deployment strategy to `Recreate`
+    - after changing the strategy to `Recreate`, Kubernetes terminated all old healthy Pods before starting their replacements. Because the replacement image did not exist, the new Pod objects remained in `ErrImagePull` or `ImagePullBackOff`, leaving zero Ready and available Pods and no healthy endpoints for the Service.
+    - this demonstrates the availability tradeoff between the strategies: `RollingUpdate` can preserve the previous healthy replicas during a failed release, while `Recreate` causes downtime because it removes the old version before verifying that the new version can start.
+    - after the test, the manifest was restored to `RollingUpdate` with the valid `nginx:1.27` image so that the exercise ends with three healthy replicas.
