@@ -21,5 +21,15 @@
     - the nginx Pods kept running, but the Service had no matching backends, so a request from the debug Pod failed with `connection refused`. Reverting the selector in Git restored `app: web` in the manifest; the corrected manifest still has to be applied for the live Service to use it.
   - step 6: testing Service access
     - a temporary Pod in a different namespace could reach the Service with `wget`. Namespaces scope Kubernetes resources but do not isolate Pod networking, so this verifies in-cluster Service access, not access from outside the cluster.
-    - changing the Service to `NodePort` assigned port `32472`. The Service had three endpoints and returned the nginx welcome page when requested from a temporary container on the kind Docker network at `172.18.0.2:32472`. The WSL host could not reach that node IP because this kind cluster does not publish the NodePort to the host; host access requires a kind `extraPortMappings` configuration when creating the cluster.
+    - changing the Service to `NodePort` made Kubernetes allocate a port from the default NodePort range. The Service had three endpoints and returned the nginx welcome page when requested from a temporary container on the kind Docker network.
+    - requesting the NodePort through the kind node IP from WSL timed out. The kind node runs as a Docker container, and `docker port k8s-exercises-control-plane` showed that only the Kubernetes API port was published to the host. A NodePort listens on the Kubernetes node, but kind does not automatically publish that container port to the host.
     - running `kubectl port-forward -n ex2 service/web 8080:80` made the Service reachable from the WSL host at `http://localhost:8080`. This confirms the Service works through the Kubernetes API tunnel, but does not expose the NodePort on the host.
+    - added `kind-config.yaml` with an `extraPortMappings` entry from host port `32142` to container port `32142`. The NodePort manifest also pins `nodePort: 32142`, because the Docker mapping and the Service must use the same node port.
+    - kind only applies `extraPortMappings` while creating a cluster, so the local cluster was recreated and the exercise resources were restored:
+      - `kind delete cluster --name k8s-exercises`
+      - `kind create cluster --name k8s-exercises --config kind-config.yaml`
+      - `kubectl apply -f ex2-deployments/namespace.yaml`
+      - `kubectl apply -f ex2-deployments/web-deploy.yaml`
+      - `kubectl apply -f ex2-deployments/web-svc-nodeport.yaml`
+      - `kubectl rollout status deployment/web-deploy -n ex2 --timeout=120s`
+    - after recreating the cluster, `curl http://127.0.0.1:32142/` returned the nginx welcome page from WSL without using port-forwarding. The request path is host port `32142` → kind node container port `32142` → NodePort Service → one of the selected nginx Pods.
