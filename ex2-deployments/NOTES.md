@@ -17,3 +17,5 @@
 - 2.3
   - step 4: changing one Pod's label from `app: web` to `app: web-old`
     - the relabelled Pod no longer matches the ReplicaSet's selector, so the ReplicaSet creates a replacement to maintain 3 matching replicas. The original Pod keeps running, making 4 Pods in total, but it is no longer selected by the Service either.
+  - step 5: changing the Service selector to a label no Pod has
+    - the nginx Pods kept running, but the Service had no matching backends, so a request from the debug Pod failed with `connection refused`. Reverting the selector in Git restored `app: web` in the manifest; the corrected manifest still has to be applied for the live Service to use it.
