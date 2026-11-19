@@ -22,6 +22,7 @@ jobs:
           mapfile -d '' manifests < <(
             find . -type f -name '*.yaml' \
               ! -path './.github/workflows/*' \
+              ! -path './kind-config.yaml' \
               -print0
           )
 
