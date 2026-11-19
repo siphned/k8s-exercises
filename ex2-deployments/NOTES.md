@@ -33,3 +33,6 @@
       - `kubectl apply -f ex2-deployments/web-svc-nodeport.yaml`
       - `kubectl rollout status deployment/web-deploy -n ex2 --timeout=120s`
     - after recreating the cluster, `curl http://127.0.0.1:32142/` returned the nginx welcome page from WSL without using port-forwarding. The request path is host port `32142` → kind node container port `32142` → NodePort Service → one of the selected nginx Pods.
+
+- 2.4
+  - step 1: while watching the Pods in a separate terminal after applying the manifest changes, I could see that at any time there were at least 3 Pods running, and at some points 4, which matches the expectations given by the `RollingUpdate` strategy options we have chosen: `maxSurge: 1` dictates that there can be at most 1 extra Pod active above the desired state while `maxUnavailable: 0` states that there cannot be any less than the desired state of 3. 
