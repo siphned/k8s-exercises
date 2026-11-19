@@ -8,3 +8,6 @@
 
 - 2.1 step 4
   - deleted Pods, and ReplicaSets are automatically recreated and launched seamlessly, in contrast to Deployments which are not recreated
+
+- 2.2
+  - upon changing replica count and applying the already active ReplicaSet adapts to the new requirements
