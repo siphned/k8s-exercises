@@ -5,7 +5,7 @@ metadata:
   name: web-deploy
   namespace: ex2
   annotations:
-    kubernetes.io/change-cause: "Update nginx image version to 1.27"
+    kubernetes.io/change-cause: "Update nginx image version from 1.99 to 1.27"
 
 spec:
   replicas: 3
