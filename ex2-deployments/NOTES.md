@@ -39,3 +39,6 @@
     - while watching the Pods in a separate terminal after applying the manifest changes, I could see that at any time there were at least 3 Pods running, and at some points 4, which matches the expectations given by the `RollingUpdate` strategy options we have chosen: `maxSurge: 1` dictates that there can be at most 1 extra Pod active above the desired state while `maxUnavailable: 0` states that there cannot be any less than the desired state of 3. 
   - step 3: `change-cause` annotation
     - useful for planned changes in manifest which require applying it again, when inspecting the rollout history, the change cause is listed, and can be tracked
+  - step 4: change nginx version to a non-existent one
+    - the new Pods could not start and never became Ready, so the rolling update kept the three old healthy Pods running to satisfy `maxUnavailable: 0`. The rollout stalled because Kubernetes could not safely replace them.
+    - Kubernetes did not give up after the first attempts: it continued retrying the image pull with increasing delays, shown as `ErrImagePull` and `ImagePullBackOff`. A Deployment does not automatically roll back; after its progress deadline it reports a failed rollout while the old Pods continue serving traffic.
