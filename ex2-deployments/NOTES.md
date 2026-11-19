@@ -46,3 +46,6 @@
     - after changing the strategy to `Recreate`, Kubernetes terminated all old healthy Pods before starting their replacements. Because the replacement image did not exist, the new Pod objects remained in `ErrImagePull` or `ImagePullBackOff`, leaving zero Ready and available Pods and no healthy endpoints for the Service.
     - this demonstrates the availability tradeoff between the strategies: `RollingUpdate` can preserve the previous healthy replicas during a failed release, while `Recreate` causes downtime because it removes the old version before verifying that the new version can start.
     - after the test, the manifest was restored to `RollingUpdate` with the valid `nginx:1.27` image so that the exercise ends with three healthy replicas.
+
+- 2.5
+  - a Service does not care whether its Pods were created by a Deployment, StatefulSet, or by hand because it does not inspect their ownership chain. It selects whichever Ready Pods currently match its label selector and sends traffic to those endpoints. The workload controller is responsible for creating and maintaining Pods, while the Service is independently responsible for discovering matching backends.
